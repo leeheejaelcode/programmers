@@ -1,51 +1,132 @@
 const answer = document.getElementById("answer");
 
-function solution(rank, attendance) {
-  const [a, b, c] = rank
-    .map((s, i) => [s, i])
-    .filter((_, i) => attendance[i])
-    .sort((a, b) => a[0] - b[0]);
+function solution(a, b, c, d) {
+  const arr = [a, b, c, d];
 
-  let result = a[1] * 10000 + b[1] * 100 + c[1];
+  // 배열 정렬
+  arr.sort((a, b) => a - b);
 
-  return result;
+  // 모두 같을 때
+  if (arr[0] === arr[3]) {
+    return a * 1111;
+  }
+
+  // 모두 다를 때
+  if (arr[0] !== arr[1] && arr[1] !== arr[2] && arr[2] !== arr[3]) {
+    return arr[0];
+  }
+
+  // 세 숫자가 같고 하나만 다른 경우
+  if (
+    (arr[0] === arr[2] && arr[2] !== arr[3]) ||
+    (arr[1] === arr[3] && arr[0] !== arr[1])
+  ) {
+    const uniqueNum = arr.find((n) => arr.indexOf(n) === arr.lastIndexOf(n));
+
+    const num = arr.find((n) => arr.indexOf(n) !== arr.lastIndexOf(n));
+    return (10 * num + uniqueNum) ** 2;
+  }
+
+  // 두 쌍이 같은 경우 (예: [6, 6, 3, 3])
+  if (arr[0] === arr[1] && arr[2] === arr[3]) {
+    return (arr[0] + arr[2]) * Math.abs(arr[0] - arr[2]);
+  }
+
+  // 같은 숫자 2개와 다른 숫자 2개 (두 숫자가 각각 짝을 이루지 않는 경우)
+  if (arr[0] === arr[1] || arr[1] === arr[2] || arr[2] === arr[3]) {
+    const uniqueNums = arr.filter((n) => arr.indexOf(n) === arr.lastIndexOf(n));
+    return uniqueNums[0] * uniqueNums[1];
+  }
 }
 
-answer.innerText = solution(
-  [3, 7, 2, 5, 4, 6, 1],
-  [false, true, true, true, true, false, false]
-);
-
-// answer.innerText = solution([1, 2, 3], [true, true, true]);
-
-// answer.innerText = solution(
-//   [6, 1, 5, 2, 3, 4],
-//   [true, false, true, false, false, true]
-// );
+// answer.innerText = solution(2, 2, 2, 2); // 2222
+// answer.innerText = solution(4, 4, 1, 4); // 1681
+// answer.innerText = solution(6, 3, 3, 6); // 27
+// answer.innerText = solution(2, 5, 2, 6); // 30
+// answer.innerText = solution(6, 4, 2, 5); // 2
 
 /* -------------------------------------------------------------------------- */
-/*                                전국 대회 선발 고사                            */
+/*                                주사위게임3                             */
 /* -------------------------------------------------------------------------- */
+
+// 문제1
+// function solution(a, b, c, d) {
+//   const arr = [a, b, c, d];
+
+//   // 배열 정렬
+//   arr.sort((a, b) => a - b);
+
+//   // 모두 같을 때
+//   if (arr[0] === arr[3]) {
+//     return a * 1111;
+//   }
+
+//   // 모두 다를 때
+//   if (arr[0] !== arr[1] && arr[1] !== arr[2] && arr[2] !== arr[3]) {
+//     return arr[0];
+//   }
+
+//   // 세 숫자가 같고 하나만 다른 경우
+//   if (
+//     (arr[0] === arr[2] && arr[2] !== arr[3]) ||
+//     (arr[1] === arr[3] && arr[0] !== arr[1])
+//   ) {
+//     const uniqueNum = arr.find((n) => arr.indexOf(n) === arr.lastIndexOf(n));
+
+//     const num = arr.find((n) => arr.indexOf(n) !== arr.lastIndexOf(n));
+//     return (10 * num + uniqueNum) ** 2;
+//   }
+
+//   // 두 쌍이 같은 경우 (예: [6, 6, 3, 3])
+//   if (arr[0] === arr[1] && arr[2] === arr[3]) {
+//     return (arr[0] + arr[2]) * Math.abs(arr[0] - arr[2]);
+//   }
+
+//   // 같은 숫자 2개와 다른 숫자 2개 (두 숫자가 각각 짝을 이루지 않는 경우)
+//   if (arr[0] === arr[1] || arr[1] === arr[2] || arr[2] === arr[3]) {
+//     const uniqueNums = arr.filter((n) => arr.indexOf(n) === arr.lastIndexOf(n));
+//     return uniqueNums[0] * uniqueNums[1];
+//   }
+// }
 
 // 설명
+// 배열 정렬: 주어진 네 개의 값을 배열에 담고 오름차순으로 정렬합니다.
+// 모두 같을 때: 모든 값이 같으면 그 값에 1111을 곱해 반환합니다.
+// 모두 다를 때: 값이 모두 다르면 가장 작은 값을 반환합니다.
+// 세 개가 같고 하나만 다른 경우: 세 개의 값이 같고 나머지 하나가 다르면, 유일한 값을 찾고 그 값과 다른 값을 결합하여 제곱한 값을 반환합니다.
+// 두 쌍이 같은 경우: 두 숫자씩 짝을 이루면 두 짝을 더한 후 차이를 곱해 반환합니다.
+// 두 숫자만 같은 경우: 두 숫자가 두 번씩 나오는 경우가 아니면, 두 개의 유일한 숫자를 곱해 반환합니다.
 
-// map으로 인덱스와 값 묶기:
-// rank.map((s, i) => [s, i])를 사용해 rank의 각 요소 s와 인덱스 i를 [s, i] 형태의 배열로 변환하여 묶습니다.
-// 이렇게 하면, 인덱스와 함께 rank 요소가 포함된 배열을 만들 수 있습니다.
+// 문제2
 
-// filter로 attendance 조건에 따라 필터링:
-// .filter((_, i) => attendance[i])를 사용하여 attendance 배열에서 true인 인덱스에 해당하는 [s, i] 쌍만 남깁니다.
+// function solution(a, b, c, d) {
+//   if (a === b && a === c && a === d) return 1111 * a
 
-// 이 과정에서 attendance[i]가 true인 [rank 요소, 인덱스] 형태의 배열이 반환됩니다.
-// 정렬:
-// .sort((a, b) => a[0] - b[0])을 통해 필터링된 배열을 rank의 값(s) 기준으로 오름차순 정렬합니다.
-// 이로 인해 rank 값이 작은 순서대로 [s, i]가 배열의 앞쪽에 위치하게 됩니다.
+//   if (a === b && a === c) return (10 * a + d) ** 2
+//   if (a === b && a === d) return (10 * a + c) ** 2
+//   if (a === c && a === d) return (10 * a + b) ** 2
+//   if (b === c && b === d) return (10 * b + a) ** 2
 
-// 필요한 요소 추출:
-// const [a, b, c] = ...로 상위 세 개의 [s, i] 쌍을 추출합니다.
+//   if (a === b && c === d) return (a + c) * Math.abs(a - c)
+//   if (a === c && b === d) return (a + b) * Math.abs(a - b)
+//   if (a === d && b === c) return (a + b) * Math.abs(a - b)
 
-// 결과 계산:
-// a[1] * 10000 + b[1] * 100 + c[1]에서 각 인덱스 값을 사용해 주어진 계산식을 완성합니다.
+//   if (a === b) return c * d
+//   if (a === c) return b * d
+//   if (a === d) return b * c
+//   if (b === c) return a * d
+//   if (b === d) return a * c
+//   if (c === d) return a * b
 
-// 조건에 대한 이해가 필요했지만 내 힘으로 풀 수 있었다..
-// 배열의 구조분해 할당을 생각을 못했지만 이렇게 접근이 가능한다는걸 알게됐다..
+//   return Math.min(a, b, c, d)
+// }
+
+// 설명
+// 모두 같을 때: 1111을 곱한 값을 반환.
+// 세 개가 같고 하나 다를 때: 10배 후 제곱해서 반환.
+// 두 숫자씩 같을 때: 두 숫자를 더하고 차이를 곱한 값을 반환.
+// 두 숫자가 같고 나머지 다른 경우: 남은 숫자 두 개를 곱한 값을 반환.
+// 그 외 모든 경우: 가장 작은 숫자를 반환.
+
+// 조건이 조금 복잡해지면 어려워한다..
+// 어떻게보면 노가다지만 성능적으로 가장 최적화된 코드도 있다는걸 생각해야겠다
